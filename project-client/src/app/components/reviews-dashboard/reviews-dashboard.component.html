@@ -1,0 +1,47 @@
+<div style="margin-top: 100px; margin-left: 5%; margin-right: 5%;">
+  <p-card>
+    <ng-template pTemplate="title">
+      Reviews Dashboard
+    </ng-template>
+    <ng-template pTemplate="subtitle">
+      My reviews
+    </ng-template>
+    <ng-template pTemplate="content">
+      <p *ngIf="reviews.length === 0"><strong>No reviews</strong></p>
+      <p-accordion [multiple]="true" [style]="{'margin-top': '20px'}">
+        <p-accordionTab *ngFor="let review of reviews">
+          <ng-template pTemplate="header">
+            <div style="display: flex; gap: 1.0rem; align-items: center;">
+              <p-chip [label]="review.restaurantName + ' | ' + review.title"
+                      [style]="{'background-color': '#82b366', 'color': '#f5f5f5'}"></p-chip>
+              <p-chip [label]="'Up votes: ' + review.numberOfUpVotes" [icon]="'pi pi-thumbs-up'"></p-chip>
+            </div>
+            <div style="display: flex; align-items: center; margin-left: auto; margin-right: 0;">
+              <p-chip [label]="review.date"></p-chip>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="content">
+            <div style="display: flex; justify-content: center;">
+              <p-chip><p-rating [(ngModel)]="review.rating" [cancel]="false" [disabled]="true"></p-rating></p-chip>
+            </div>
+            <div style="margin-top: 20px; text-align: center;">
+              <pre
+                style="@import 'theme.css'; font-family: var(--font-family); white-space: pre-wrap; overflow: auto;">{{ review.note }}</pre>
+            </div>
+            <p-divider align="center" [style]="{'margin-top': '20px', 'z-index': '0'}">Actions</p-divider>
+            <div style="margin-top: 20px; display: flex; justify-content: start;">
+              <p-button (click)="deleteReview(review.id)" label="Delete review" styleClass="p-button-danger"
+                        icon="pi pi-trash"></p-button>
+              <span style="margin-left: auto;"><p-button [routerLink]="'/restaurant-page/' + review.restaurantId"
+                                                         label="Go to restaurant page"
+                                                         styleClass="p-button-primary"></p-button></span>
+            </div>
+          </ng-template>
+        </p-accordionTab>
+      </p-accordion>
+    </ng-template>
+  </p-card>
+</div>
+
+<p-confirmDialog [style]="{width: '50vw'}" acceptButtonStyleClass="p-button-danger"
+                 rejectButtonStyleClass="p-button-secondary"></p-confirmDialog>

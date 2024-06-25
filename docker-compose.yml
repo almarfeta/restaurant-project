@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+
+  database:
+    container_name: project-db
+    image: postgres:alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: secret
+      PGDATA: /data/postgres
+    ports:
+      - '5432:5432'

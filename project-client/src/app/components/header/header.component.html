@@ -1,0 +1,127 @@
+<p-toolbar [style]="{'border-radius': 0, 'position': 'fixed', 'top': 0, 'z-index': 1, 'width': '100%'}">
+
+  <a class="p-toolbar-group-start" routerLink="/search-results/all" style="text-decoration: none;">
+    <img src="assets/logo.png" alt="No image">
+    <h3 style="color: #82b366; padding: 0.5rem; font-family: Charmonman; margin: 0px 0px;">Culinary Companion</h3>
+  </a>
+
+  <div class="p-toolbar-group-center">
+    <form (ngSubmit)="search()">
+      <div class="p-inputgroup">
+        <button type="submit" pButton icon="pi pi-search" class="p-button-primary"></button>
+        <input name="search" [(ngModel)]="searchInput" type="text" pInputText placeholder="Restaurant" size="30"/>
+      </div>
+    </form>
+  </div>
+
+  <div class="p-toolbar-group-end">
+      <span *ngIf="isAuthenticated()" style="padding: 0.3rem">
+        <p-button routerLink="/dashboard" label="My restaurants"
+                  styleClass="p-button-outlined p-button-primary"></p-button>
+      </span>
+    <span *ngIf="isAuthenticated()" style="padding: 0.3rem">
+        <p-button routerLink="/my-reviews" label="My reviews"
+                  styleClass="p-button-outlined p-button-primary"></p-button>
+      </span>
+    <span *ngIf="isAuthenticated()" style="padding: 0.3rem">
+        <p-button (click)="showProfile()" label="Profile" styleClass="p-button-outlined p-button-primary"></p-button>
+      </span>
+    <span *ngIf="!isAuthenticated()" style="padding: 0.3rem">
+        <p-button (click)="showSignIn()" label="Sign in" styleClass="p-button-raised p-button-primary"></p-button>
+      </span>
+  </div>
+
+</p-toolbar>
+
+<p-dialog [(visible)]="isSignInVisible"
+          [modal]="true" [draggable]="false" [resizable]="false"
+          [header]="signInModalHeader"
+          [style]="{width: '30vw', height: '50vw'}"
+          (onHide)="resetModal()">
+
+  <form *ngIf="isLogin"
+        [formGroup]="loginForm"
+        (ngSubmit)="submit()"
+        style="display: flex; flex-direction: column; align-items: center;">
+
+        <span class="p-float-label" style="margin-top: 20px;">
+          <input formControlName="email" pInputText id="loginEmail" [style]="{'width':'33ch'}" type="email"/>
+          <label for="loginEmail">Email</label>
+        </span>
+
+    <span class="p-float-label" style="margin-top: 20px;">
+          <p-password formControlName="password" id="loginPassword" [feedback]="false" [inputStyle]="{'width':'33ch'}"
+                      [toggleMask]="true"></p-password>
+          <label for="loginPassword">Password</label>
+        </span>
+
+    <p-button styleClass="p-button-success" type="submit" [style]="{'margin-top': '20px'}" label="Submit"></p-button>
+
+  </form>
+
+  <form *ngIf="!isLogin"
+        [formGroup]="registerForm"
+        (ngSubmit)="submit()"
+        style="display: flex; flex-direction: column; align-items: center;">
+
+          <span class="p-float-label" style="margin-top: 20px;">
+            <input formControlName="firstName" pInputText id="firstName" [style]="{'width':'33ch'}" type="text"/>
+            <label for="firstName">First Name</label>
+          </span>
+
+    <span class="p-float-label" style="margin-top: 20px;">
+            <input formControlName="lastName" pInputText id="lastName" [style]="{'width':'33ch'}" type="text"/>
+            <label for="lastName">Last Name</label>
+          </span>
+
+    <span class="p-float-label" style="margin-top: 20px;">
+            <input formControlName="email" pInputText id="registerEmail" [style]="{'width':'33ch'}" type="email"/>
+            <label for="registerEmail">Email</label>
+          </span>
+
+    <span class="p-float-label" style="margin-top: 20px;">
+            <p-password formControlName="password" id="registerPassword" [feedback]="false"
+                        [inputStyle]="{'width':'33ch'}" [toggleMask]="true"></p-password>
+            <label for="registerPassword">Password</label>
+          </span>
+
+    <p-button styleClass="p-button-success" type="submit" [style]="{'margin-top': '20px'}" label="Submit"></p-button>
+
+  </form>
+
+  <p-divider align="center"
+             [style]="{'margin-top': '20px'}">
+    {{ signInDividerMessage }}
+  </p-divider>
+
+  <span style="display: flex; justify-content: center;">
+    <p-button (click)="signInSwitch()"
+              [style]="{'margin-top': '20px'}"
+              [label]="switchButtonMessage"
+              styleClass="p-button-help">
+    </p-button>
+  </span>
+
+</p-dialog>
+
+<p-toast></p-toast>
+
+<p-sidebar [(visible)]="isProfileVisible" position="right">
+
+  <ng-template pTemplate="header">
+    <h2>Profile</h2>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <p>Email: {{ profileUserData.email }} </p>
+    <p>Role: {{ profileUserData.role }}</p>
+    <p>Firs name: {{ profileUserData.firstName }}</p>
+    <p>Last name: {{ profileUserData.lastName }}</p>
+    <p>Join date: {{ profileUserData.joinDate }}</p>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button (click)="logoutUser()" icon="pi pi-sign-out" label="Log out" styleClass="p-button-danger"></p-button>
+  </ng-template>
+
+</p-sidebar>

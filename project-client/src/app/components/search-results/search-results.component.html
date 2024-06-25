@@ -1,0 +1,83 @@
+<div
+  style="margin-top: 100px; margin-left: 5vw; margin-right: 5vw; display: grid; grid-template-columns: 30% 70%; column-gap: 1vw; margin-bottom: 20%;">
+  <div>
+    <p-card header="Sorting and Pagination">
+      <ng-template pTemplate="content">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+                    <span style="display: flex; gap: 1.0rem; align-items: center;">
+                        <p>By name</p>
+                        <p-button (click)="sort('name', 'asc')" icon="pi pi-arrow-up"
+                                  styleClass="p-button-rounded p-button-secondary p-button-outlined"></p-button>
+                        <p-button (click)="sort('name', 'desc')" icon="pi pi-arrow-down"
+                                  styleClass="p-button-rounded p-button-secondary p-button-outlined"></p-button>
+                    </span>
+          <span style="display: flex; gap: 1.0rem; align-items: center;">
+                        <p>By city</p>
+                        <p-button (click)="sort('city', 'asc')" icon="pi pi-arrow-up"
+                                  styleClass="p-button-rounded p-button-secondary p-button-outlined"></p-button>
+                        <p-button (click)="sort('city', 'desc')" icon="pi pi-arrow-down"
+                                  styleClass="p-button-rounded p-button-secondary p-button-outlined"></p-button>
+                    </span>
+          <span style="display: flex; gap: 1.0rem; align-items: center;">
+                        <p>By country</p>
+                        <p-button (click)="sort('country', 'asc')" icon="pi pi-arrow-up"
+                                  styleClass="p-button-rounded p-button-secondary p-button-outlined"></p-button>
+                        <p-button (click)="sort('country', 'desc')" icon="pi pi-arrow-down"
+                                  styleClass="p-button-rounded p-button-secondary p-button-outlined"></p-button>
+                    </span>
+
+          <p-divider>Pagination</p-divider>
+          <p-paginator (onPageChange)="onPageChange($event)"
+                       [first]="first" [rows]="rows" [totalRecords]="totalRecords" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
+  <div>
+    <p-tabView>
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <div style="display: flex; gap: 0.3rem;">
+            <span>Results by name</span>
+          </div>
+        </ng-template>
+        <h4 *ngIf="restaurants.length === 0">No restaurants found</h4>
+        <p-card *ngFor="let restaurant of restaurants"
+                [style]="{'width': '100%', 'margin-top': '10px', 'background-color': '#fafafa'}"
+                styleClass="p-card-shadow">
+          <ng-template pTemplate="title">
+            <div style="display: flex; align-items: center;">
+              <p>{{ restaurant.name }}</p>
+              <div style="display: flex; gap: 0.3rem; margin-right: 0; margin-left: auto;">
+                <p-chip [label]="restaurant.city"></p-chip>
+                <p-chip [label]="restaurant.country"></p-chip>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="subtitle">
+            Rating {{ restaurant.rating | number:'1.2-2' }}/5.00 from {{ restaurant.numberOfReviews }} reviews
+          </ng-template>
+          <ng-template pTemplate="content">
+            <div style="display: flex;">
+              <img [src]="restaurant.profilePicture" alt="No image" width="30%">
+              <div style="margin-left: 1vw; width: 70%;">
+                <div style="max-width: 100%; overflow: hidden">
+                  <p *ngIf="restaurant.shortDescription === '' || restaurant.shortDescription === undefined"><em>No information given</em></p>
+                  <pre
+                    style="@import 'theme.css'; font-family: var(--font-family); white-space: pre-wrap; overflow: auto;">{{ restaurant.shortDescription }}</pre>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="footer">
+            <div style="display: flex; gap: 0.3rem; align-items: center;">
+              <div style="display: flex; gap: 0.3rem; margin-right: 0; margin-left: auto;">
+                <p-button [routerLink]="'/restaurant-page/' + restaurant.id" label="Go to page"></p-button>
+              </div>
+            </div>
+          </ng-template>
+        </p-card>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+</div>
